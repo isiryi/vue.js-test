@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <custom-list :items="['A', 'B', 'C']"></custom-list>
+    </div>
+</body>
+<script>
+    Vue.component('custom-list', {
+        props: ['items'],
+        data() {
+          return {
+              list: []
+          }
+        },
+        template:  `
+            <ul>
+                <li
+                    v-for="item in list"
+                    :key="item"
+                    @click="onItemClick(item)">
+                    {{ item }}
+                </li>
+            </ul>
+        `,
+        methods: {
+            onItemClick(item){
+                const index = this.list.indexOf(item);
+                if (index > -1) {
+                    const start = this.list.slice();
+                    start.splice(index, 1);
+                    const ordered = [item];
+                    ordered.push(...start);
+                    this.list = ordered;
+                }
+            }
+        },
+        created() {
+            this.list = this.items.slice();
+        }
+    });
+    var app = new Vue({
+        el: '#app'
+    });
+</script>
+</html>
